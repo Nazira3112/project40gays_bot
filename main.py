@@ -1,20 +1,10 @@
 from telegram import Update
-from telegram.ext import (
-    ApplicationBuilder,
-    CommandHandler,
-    MessageHandler,
-    ContextTypes,
-    filters,
-)
+from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 
-# ==========================
-# НАСТРОЙКИ
-# ==========================
-
-BOT_TOKEN = "8784337580:AAHETBLcR7Gn25Yv-QEVlMHmcyxlzzXKmZM"
+TOKEN = "8784337580:AAHETBLcR7Gn25Yv-QEVlMHmcyxlzzXKmZM"
 OWNER_ID = 6229829943
 
-WELCOME_TEXT = """
+WELCOME = """
 🕊️ <b>40 Days Without You</b>
 
 Иногда есть слова, которые невозможно произнести вслух.
@@ -25,12 +15,12 @@ WELCOME_TEXT = """
 
 Ваше сообщение станет частью художественного проекта.
 
-Пожалуйста, не указывайте имена, телефоны или другие личные данные, если хотите сохранить анонимность.
+Пожалуйста, не указывайте имена и другие личные данные, если хотите сохранить анонимность.
 
 Когда будете готовы — просто отправьте сообщение.
 """
 
-THANK_YOU = """
+THANKS = """
 Спасибо.
 
 Ваш голос сохранён.
@@ -38,37 +28,25 @@ THANK_YOU = """
 Возможно, однажды он станет частью произведения искусства.
 """
 
-# ==========================
-# КОМАНДА /start
-# ==========================
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_html(WELCOME_TEXT)
+    await update.message.reply_html(WELCOME)
 
-# ==========================
-# ПРИЁМ СООБЩЕНИЙ
-# ==========================
 
-async def receive_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
+async def message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
     await context.bot.send_message(
-        chat_id=OWNER_ID,
-        text=f"📝 Новое признание:\n\n{text}"
+        OWNER_ID,
+        f"📝 Новое признание:\n\n{text}"
     )
 
-    await update.message.reply_text(THANK_YOU)
+    await update.message.reply_text(THANKS)
 
-# ==========================
-# ЗАПУСК
-# ==========================
 
-app = ApplicationBuilder().token(BOT_TOKEN).build()
+app = Application.builder().token(TOKEN).build()
 
 app.add_handler(CommandHandler("start", start))
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, receive_message))
-
-print("Bot is running...")
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message))
 
 app.run_polling()
