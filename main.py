@@ -11,7 +11,7 @@ from telegram.ext import (
 # НАСТРОЙКИ
 # ==========================
 
-BOT_TOKEN = "YOUR_NEW_BOT_TOKEN"
+BOT_TOKEN = "8784337580:AAHETBLcR7Gn25Yv-QEVlMHmcyxlzzXKmZM"
 OWNER_ID = 6229829943
 
 WELCOME_TEXT = """
